@@ -602,7 +602,7 @@ cat1 = CuteCat("Jojo", 1, "橙色")
 cat1.think("现在去抓沙发还是去撕纸箱")
 ```
 
-spaek方法：小猫的年级*喵，表现为小猫有多大就会喵几声
+spaek方法：小猫的年龄*喵，表现为小猫有多大就会喵几声
 
 上面代码的输出为：
 
@@ -901,3 +901,107 @@ assert 这里写你认为应该为true的表达式
 ```
 
 一旦你认为应该为true的表达式不为true，停止运行并提示AssertionError断言错误，然后程序直接终止
+
+**测试库**：`unittest`
+
+```bash
+import unittest
+```
+
+测试代码一般放到独立文件里
+
+假如文件my_calcuilator.py实现代码如下
+
+```bash
+def my_adder(x, y):
+    return x + y
+```
+
+测试文件test_my_calculator.py,假如**测试文件和被测试文件位于同一文件夹下**，语法如下
+
+```bash
+# 导入Python内置单元测试框架unittest
+import unittest
+# 从my_calculator.py文件中导入自定义加法函数my_adder
+from my_calculator import my_adder
+
+# 创建测试类，必须继承unittest.TestCase（所有测试用例的父类）
+class TestMyAdder(unittest.TestCase):
+    # 测试用例方法：方法名必须以test_开头，框架才会自动执行
+    # 测试场景：正数 + 正数
+    def test_positive_with_positive(self):
+        # self.assertEqual(实际结果, 预期结果)：断言方法
+        # 作用：判断my_adder(5,3)的返回值是否等于8，不等则测试失败
+        self.assertEqual(my_adder(5, 3), 8)
+
+    # 测试用例：负数 + 正数
+    def test_negative_with_positive(self):
+        # ... 此处省略具体断言代码，可自行补充示例
+        # 示例：self.assertEqual(my_adder(-2, 5), 3)
+        ...
+```
+
+写好测试用例后，在终端输入
+
+```bash
+python -m unittest
+```
+
+终端会返回运行了几个测试，测试通过终端返回`.`不通过返回`F`
+
+一些测试的方法：
+
+* assertEqual(A, B) 相当于assert A == B
+* assertTrue(A) 相当于assert A is True
+* assertIn(A, B) 相当于assert A in B
+* assertNotEqual(A, B) 相当于assert A != B
+* assertFalse(A) 相当于assert A is False
+* assertNotIn(A, B) 相当于assert A not in B
+
+assertTrue 是万能方法，但是更具有针对性的方法报错会更具体
+
+Setup方法：不重复创建变量
+
+---
+
+## 🤓 高阶函数
+
+把函数作为参数传入另一个号函数
+
+```bash
+# 写法1：传入函数本身（不加括号）✅ 正确用法
+calculate_and_print(3, calculate_square)
+
+# 写法2：传入函数调用后的返回值（带括号）❌ 会报错
+# calculate_and_print(3, calculate_square())
+# 报错原因：calculate_square()缺少必要参数n，程序运行到这一行就先执行函数，无参数直接抛出异常
+```
+
+匿名函数：
+
+```bash
+# 自定义打印，两侧加竖线
+def print_with_vertical_bar(res):
+    print(f"|{res}|")
+
+# 接收数值、计算函数、打印函数
+def calculate_and_print(n, calc, show):
+    res = calc(n)
+    show(res)
+
+# 7乘5，再用竖线格式打印
+calculate_and_print(7, lambda num: num * 5, print_with_vertical_bar)
+```
+
+也可以定义好被直接调用
+
+```bash
+# 双参数lambda直接传2和3求和
+(lambda num1, num2: num1 + num2)(2, 3)
+```
+
+匿名函数适合一次性调用，但是只能写一行操作，不支持写多行
+
+---
+
+完了！
